@@ -102,7 +102,7 @@ func use() {
 			defer resp.Body.Close()
 			content = resp.Body
 			if resp.StatusCode == 404 {
-				fmt.Println("没有找到这个版本")
+				fmt.Println("can not found node version.")
 				return
 			}
 		}
