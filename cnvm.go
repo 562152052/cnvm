@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -88,23 +89,23 @@ func uninstall() {
 // 切换版本
 func use() {
 	if !PathExists(PWD + os.Args[2] + "/node.exe") {
-		resp, err := http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + "/win-x64/node.exe")
+		num, err := strconv.ParseInt(strings.Split(os.Args[2], ".")[0], 10, 64)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		str := ""
+		if num > int64(4) {
+			str = "/win-x86"
+		}
+		resp, err := http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + str + "/node.exe")
 		if err != nil {
 			fmt.Println(err)
 		}
 		defer resp.Body.Close()
-		content := resp.Body
 		if resp.StatusCode == 404 {
-			resp, err = http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + "/node.exe")
-			if err != nil {
-				fmt.Println(err)
-			}
-			defer resp.Body.Close()
-			content = resp.Body
-			if resp.StatusCode == 404 {
-				fmt.Println("can not found node version.")
-				return
-			}
+			fmt.Println("can not found node version.")
+			return
 		}
 
 		// 查看存放该版本nodejs的文件夹是否存在.
@@ -117,7 +118,7 @@ func use() {
 		if err != nil {
 			panic(err)
 		}
-		io.Copy(f, content)
+		io.Copy(f, resp.Body)
 	}
 
 	// 复制对应的版本文件到对应目录.
