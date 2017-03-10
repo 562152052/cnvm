@@ -32,7 +32,7 @@ func init() {
 }
 
 func main() {
-
+	// 如果命令少于2位则匹配不到对应的逻辑.
 	if len(os.Args) < 2 {
 		help()
 		return
