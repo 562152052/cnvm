@@ -125,7 +125,9 @@ func use() {
 	_, err := CopyFile(PWD+"node.exe", PWD+os.Args[2]+"/node.exe")
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
+	fmt.Println("use node version " + os.Args[2] + " successfuly")
 }
 
 // 判断文件是否存在或者该版本nodejs二进制是否存在.
