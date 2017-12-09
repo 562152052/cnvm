@@ -101,6 +101,7 @@ func use() {
 		resp, err := http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + str + "/node.exe")
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode == 404 {
@@ -117,6 +118,7 @@ func use() {
 		f, err := os.Create(PWD + os.Args[2] + "/node.exe")
 		if err != nil {
 			panic(err)
+			return
 		}
 		io.Copy(f, resp.Body)
 	}

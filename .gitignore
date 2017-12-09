@@ -3,8 +3,7 @@
 !.gitignore
 
 
-*.exe
-*.exe~
+
 *.DS_Store
 *.logs
 *.cache
