@@ -96,7 +96,7 @@ func use() {
 		}
 		str := ""
 		if num > int64(4) {
-			str = "/win-x86"
+			str = "/win-x64"
 		}
 		resp, err := http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + str + "/node.exe")
 		if err != nil {

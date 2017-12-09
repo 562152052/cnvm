@@ -4,22 +4,8 @@
 
 
 *.exe
-*.exe"
 *.exe~
 *.DS_Store
 *.logs
 *.cache
 .idea
-
-tmp/session/*
-tmp/cache/*
-tempfiles/*
-uploads/*
-
-static/bower_components/
-node_modules
-*.exe~
-
-.vscode/settings.json
-nbproject
-/nbproject/private/
