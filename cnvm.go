@@ -24,6 +24,7 @@ const (
 	VERSION     = "version"
 	UNINSTALL   = "uninstall"
 	NODEVERSION = "node-version"
+	UPDATE      = "update"
 )
 
 func init() {
@@ -44,6 +45,8 @@ func main() {
 		help()
 	case USE:
 		use()
+	case UPDATE:
+		Update()
 	case LS:
 	case VERSION:
 		fmt.Println("cnvm version v1.0.0")
@@ -77,15 +80,6 @@ Available Commands:
 	`)
 }
 
-// 卸载nodejs版本
-func uninstall() {
-	err := os.RemoveAll(PWD + os.Args[2])
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-}
-
 // 切换版本
 func use() {
 	if !PathExists(PWD + os.Args[2] + "/node.exe") {
@@ -98,6 +92,7 @@ func use() {
 		if num > int64(4) {
 			str = "/win-x64"
 		}
+
 		resp, err := http.Get("https://npm.taobao.org/mirrors/node/v" + os.Args[2] + str + "/node.exe")
 		if err != nil {
 			fmt.Println(err)
@@ -130,6 +125,29 @@ func use() {
 		return
 	}
 	fmt.Println("use node version " + os.Args[2] + " successfuly")
+}
+
+// 更新到最近版本的Node
+func Update() {
+	resp, err := http.Get("https://npm.taobao.org/mirrors/node/latest/win-x64/node.exe")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 404 {
+		fmt.Println("can not found node version.")
+		return
+	}
+	// 将下载来了node二进制保存.
+	f, err := os.Create(PWD + "/node.exe")
+	if err != nil {
+		panic(err)
+		return
+	}
+	io.Copy(f, resp.Body)
+
+	fmt.Println("use node version latest successfuly")
 }
 
 // 判断文件是否存在或者该版本nodejs二进制是否存在.
@@ -166,4 +184,14 @@ func selectNodeVersion() {
 		fmt.Println(err)
 	}
 	fmt.Println(string(out))
+}
+
+// 卸载nodejs版本
+func uninstall() {
+	err := os.RemoveAll(PWD + os.Args[2])
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("remove node version " + os.Args[2] + " successfuly")
 }
