@@ -45,8 +45,6 @@ func main() {
 		help()
 	case USE:
 		use()
-	case UPDATE:
-		Update()
 	case LS:
 	case VERSION:
 		fmt.Println("cnvm version v1.0.0")
@@ -82,6 +80,12 @@ Available Commands:
 
 // 切换版本
 func use() {
+
+	if os.Args[2] == "latest" {
+		Update()
+		return
+	}
+
 	if !PathExists(PWD + os.Args[2] + "/node.exe") {
 		num, err := strconv.ParseInt(strings.Split(os.Args[2], ".")[0], 10, 64)
 		if err != nil {
